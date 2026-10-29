@@ -1,0 +1,52 @@
+# Private data and local workspace
+/private/
+/build/
+/reports/
+/runs/
+/test-plugins/
+/upstream/
+/.vscode/
+
+# Firmware, ROMs and audio assets
+*.bin
+*.rom
+*.syx
+*.mid
+*.wav
+*.aif
+*.aiff
+*.flac
+*.mp3
+
+# Compiled binaries and archives
+*.exe
+*.dll
+*.pdb
+*.lib
+*.obj
+*.clap
+*.zip
+*.7z
+*.rar
+*.vst3/
+
+# Build caches
+CMakeCache.txt
+CMakeFiles/
+__pycache__/
+.venv/
+venv/
+node_modules/
+*.log
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*credentials*
+*secrets*
