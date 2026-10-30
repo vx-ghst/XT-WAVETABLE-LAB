@@ -100,3 +100,14 @@ Waldorf or Gearmulator release.
 A license for original XT Wavetable Lab code has not
 yet been selected. Third-party components retain their
 respective licenses.
+
+<!-- XT-WAVETABLE-LAB-ARCHITECTURE-LINKS-v1 -->
+## Project architecture and source code
+
+- [Canonical architecture](docs/ARCHITECTURE.md)
+- [Where to place new files](docs/FILE_PLACEMENT_RULES.md)
+- [Verified project status](docs/STATUS.md)
+- [Upstream references](docs/UPSTREAM_LOCK.md)
+- [Technical research](docs/research/XT_STEP24_1_CARTOGRAPHIE.md)
+- Original source code belongs under `src/xtwavetable/`.
+- Scripts live in `scripts/`; private dumps and firmware remain local.
