@@ -3,9 +3,9 @@
 ## Référence Git et architecture
 
 - Dépôt public : `vx-ghst/XT-WAVETABLE-LAB`, branche `main`.
-- Dernier commit public **vérifié avant le commit M1** : `591495653370712ae192715cd4bd5abf73dcf135` (`docs: establish canonical project architecture and audits`). Le commit initial est `d5ed656`.
+- Dernier commit public vérifié : `8dd121e4bac482ec56ae09441530a454db0adcb6` (`feat(m1): implement validated XT SysEx codec and dump inspector`). Commit précédent d'architecture : `591495653370712ae192715cd4bd5abf73dcf135`. Commit initial : `d5ed656`.
 - Arborescence canonique publiée : code sous `src/xtwavetable/`, tests sous `tests/`, scripts sous `scripts/audit/`, documentation publique sous `docs/`.
-- Les **15 nouveaux fichiers M1** de code, tests et scripts sont présents localement et ajoutés à l'index Git (`A`), d'après la sortie `git status --short` transmise. `git diff --cached --check` ne signale pas d'erreur. **Aucun commit ni push M1 n'a encore été confirmé.**
+- M1 est publié et la synchronisation `main...origin/main` a été confirmée dans le journal de push. Le code M2 est présent localement, encore **non suivi** par Git selon `git status --short` du 30 octobre 2026 ; aucun commit ni push M2 n'est confirmé.
 - `private/`, `reports/`, `runs/`, `upstream/`, `build/`, `.vscode/` et `test-plugins/` restent hors du dépôt public.
 
 ## M0 — Base de recherche et environnement (validé sur le périmètre audité)
@@ -19,7 +19,7 @@
 
 ## M1 — Modèle Wave/Table, codec SysEx et inspection des dumps
 
-**Statut : VALIDÉ TECHNIQUEMENT EN LOCAL — PUBLICATION GIT À FINALISER.**
+**Statut : VALIDÉ TECHNIQUEMENT ET PUBLIÉ (commit `8dd121e`).**
 
 ### Implémentations locales validées
 
@@ -50,16 +50,52 @@ Les rapports JSON restent sous `reports/` et ne doivent pas être ajoutés à Gi
 - Les 30 vecteurs C++ confirment l'identité binaire sur le corpus testé, pas une équivalence universelle ni une validation matérielle.
 - Les essais Xenia réalisés précédemment ne constituent pas la validation M4 d'un moteur de rendu automatisé, et aucun résultat de fidélité sonore Xenia vs XT physique n'est certifié.
 
-## Publication M1 — Actions restantes
+## Publication M1 — clôturée
 
-1. Vérifier le **diff indexé complet**, les chemins, les licences et l'absence de données privées.
-2. Ajouter les corrections de `docs/ARCHITECTURE.md` et `docs/STATUS.md` aux 15 nouveaux fichiers M1.
-3. Relancer les 48 tests si le code change avant commit ; vérifier `git diff --cached --check`, `git diff --cached --name-only` et `git diff --cached`.
-4. Créer puis pousser le commit M1 seulement après revue. Mettre à jour le présent statut avec le SHA réellement publié lors d'une révision ultérieure.
+- Publication GitHub vérifiée : `8dd121e4bac482ec56ae09441530a454db0adcb6` sur `main` ; 17 fichiers dans le commit (15 ajouts de code/tests/scripts et 2 documents modifiés).
+- Aucune ROM, firmware ou dump personnel ne figure dans les chemins publiés du commit M1.
+
+## M2 — MVP déterministe WAV → XT → SysEx (candidat à publication)
+
+**Statut : M2.1 à M2.8 VALIDÉS LOCALEMENT sur le périmètre exécuté ; documentation et publication Git M2 à finaliser.**
+
+| Sous-étape | Fonctionnalité développée | État observé |
+|---|---|---|
+| M2.1 | WAV mono/stéréo : PCM 16/24/32, Float 32, fréquences natives dont 44,1 / 48 / 96 kHz | PASS |
+| M2.2 | Crop, downmix explicite, retrait DC, normalisation Peak optionnelle | PASS |
+| M2.3 | F0 estimée, périodicité, centroïde et flux spectraux (heuristiques) | PASS |
+| M2.4 | Extraction de cycles candidats et projection vers la géométrie Wave XT | PASS |
+| M2.5 | Sélection uniforme/diversité, dédoublonnage, 8/16/32/61 Waves | PASS |
+| M2.6 | Snapshot complet, Wave/Table IDs explicitement autorisés, export SysEx hors ligne | PASS |
+| M2.7 | Pipeline déterministe intégrant WAV, modèles, analyse, sélection et export | PASS |
+| M2.8 | CLI `convert`/`verify`, artefacts privés sous `runs/`, double conversion et contrôle d'intégrité | PASS sur le périmètre testé |
+
+### Preuve Windows du 30 octobre 2026
+
+- `python -m unittest discover -s tests -t . -v` : **250 tests exécutés ; 250 PASS, 0 SKIP, 0 FAIL, 0 ERROR**, sortie `Ran 250 tests in 15.549s` puis `OK`.
+- Les **quatre scénarios de liens symboliques** (`test_job_symlink_guard`, `test_nested_symlink_inside_private_rejected`, `test_symlink_escape_rejected`, `test_symlink_runs_rejected`) ont d'abord été classés SKIP en raison de `WinError 1314` (droits Windows insuffisants). Après activation du mode développeur, la création de symlinks sans administrateur a été vérifiée `[PASS]`, puis ces **4 tests ont réussi individuellement (4/4 PASS)** et lors de la **suite complète (250/250 PASS)**. La sortie complète a été fournie par l’utilisateur le 30 octobre 2026. Ces 4 SKIP restent un résultat historique antérieur, et non l'état final.
+- `python -m xtwavetable.cli.convert convert --help` : options de la CLI affichées ; cette vérification ne crée pas de job.
+- `git status --short` : modules M2 non suivis (`src/xtwavetable/audio/`, `analysis/`, `converter/`, `optimizer/`, `export/`, `cli/`), tests nouveaux et `docs/spec/05_M2_CLI_GUIDE.md`. Aucune publication M2 observée.
+- Les vérifications de reproductibilité dans les tests portent sur des **fixtures synthétiques**. Aucun essai de qualité musicale avec des échantillons utilisateur, aucun rendu par interpolation XT et aucune validation sur synthétiseur physique.
+
+### Limites et garde-fous M2
+
+- Les 250 Waves et 32 Tables utilisateur du snapshot sont vérifiées ; les commandes Single/Multi/Global et certaines dépendances spéciales ne sont pas sémantiquement certifiées.
+- Un slot non référencé n'est jamais considéré comme libre. Toute destination RAM et tout remplacement sont explicitement autorisés **pour la fabrication d'un artefact offline seulement**.
+- La CLI ne comporte aucun accès matériel, flash, ni émission MIDI ; générer un `.syx` ne vaut jamais permission de l'envoyer au XT.
+- L'analyse de hauteur et les critères de diversité/projection ne prouvent pas la fidélité perceptive. Les transitions entre Waves et l'interpolation XT restent à tester en M3/M4.
+- Fichiers WAV limités à 64 Mio et sauvegardes SysEx à 16 Mio par l'interface M2.8 actuelle ; pas de streaming de très gros fichiers.
+- Les rapports produits sous `runs/` contiennent des empreintes de données privées : **ne pas les publier**.
+
+### Dernières actions avant publication M2
+
+1. Vérifier la liste exacte des **23 nouveaux fichiers M2** et les quatre documents actualisés, puis inspecter le diff indexé complet.
+2. Archiver le journal Windows du **250/250 PASS, 0 SKIP** ainsi que le contrôle ciblé des 4 symlinks ; ne pas confondre cet acquis de sécurité avec une validation matérielle ou perceptive.
+3. Lors de la publication, enregistrer le nouveau SHA Git ; ne pas déclarer M2 publié avant `git push` confirmé.
 
 ## Non confirmé ou hors du jalon courant
 
-- Aucun moteur métier WAV → wavetable n'est encore implémenté ou validé : **M2 non commencé**.
+- Le moteur WAV → XT hors ligne est développé et validé sur fixtures synthétiques ; **qualité sonore perceptive et rendu d’interpolation non validés** (M3/M4).
 - Rendu Xenia Stock automatisé et reproductible : **M4 non commencé**.
 - Démarrage et compatibilité de Tallent Edition dans Xenia : **non démontrés** (M5).
 - Comparaison sonore ou numérique avec le Waldorf XT physique : **non certifiée** (M7 optionnel).
@@ -68,4 +104,4 @@ Les rapports JSON restent sous `reports/` et ne doivent pas être ajoutés à Gi
 
 ## Étape suivante
 
-**Clôturer la publication Git de M1**, puis ouvrir **M2 — convertisseur WAV → XT déterministe** conformément à `docs/spec/03_ROADMAP.md`. Ne pas démarrer l'intégration hardware, le flash, la GUI ou Tallent Edition pendant cette clôture.
+**Finaliser la revue documentaire/sécurité et la publication Git de M2**, après la suite Windows 250/250 PASS sans SKIP. Ensuite ouvrir **M3 — préécoute approximative, simulation de transitions/interpolation et batch QA** selon `docs/spec/03_ROADMAP.md`. Ne pas démarrer le flash, la GUI, ni Tallent Edition pendant cette clôture.

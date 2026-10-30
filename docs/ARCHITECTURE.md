@@ -54,7 +54,7 @@ D:\DEV\XT-WAVETABLE-LAB\                      # RACINE GIT (origin: vx-ghst/XT-W
 
 Les dossiers logiques `src/xtwavetable/*` décrivent les responsabilités. Ne créer physiquement un sous-dossier que lorsqu'un vrai module ou test y est ajouté : une arborescence vide n'est pas du code.
 
-**État M1 au 30 octobre 2026 :** `src/xtwavetable/model/` et `src/xtwavetable/codec_xt/` sont implémentés et validés localement. Les outils complémentaires sont sous `scripts/audit/`, leurs tests sous `tests/`. Leur première publication GitHub est en préparation et ne doit pas être considérée comme effectuée avant un nouveau commit et son push. Les autres modules métier restent des responsabilités cibles, non des implémentations annoncées.
+**État vérifié au 30 octobre 2026 :** M1 (modèles Wave/Table, codec SysEx, inspection read-only et tests) est publié au commit `8dd121e4bac482ec56ae09441530a454db0adcb6`. M2.1 à M2.8 sont implémentés et validés localement, mais **pas encore publiés** : lecture WAV (`audio/`), prétraitement (`audio/`), analyse (`analysis/`), extraction (`converter/`), sélection (`optimizer/`), export offline (`export/`), pipeline (`converter/`) et CLI (`cli/`). Les dossiers `preview/`, `adapters/xenia/` et les autres responsabilités non implémentées restent cibles. La simulation d'interpolation XT relève de M3, puis sa confrontation à l'émulation stock Xenia relève de M4.
 
 ## Architecture logicielle, indépendamment de l'hébergement Git
 

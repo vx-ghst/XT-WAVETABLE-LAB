@@ -22,13 +22,13 @@ Milestones are not deadlines. A stage is DONE only when exit criteria are verifi
 
 ## M3 — Fast preview and batch QA
 
-**Deliverables:** approximate preview engine, A/B output export, batch analysis, automated technical reports and active regression suite.
+**Deliverables:** approximate preview engine, simulation of wavetable-position interpolation and transitions between successive XT Waves, A/B output export, batch analysis, automated technical reports and active regression suite. Inspect clicks/phase jumps, RMS/timbre discontinuity and sweep trajectories; do not present this approximation as firmware-identical.
 
 **Exit:** auditable comparisons; known approximation gaps documented. No false claims of XT identity.
 
 ## M4 — Xenia stock renderer adapter
 
-**Deliverables:** pinned Gearmulator fork or tool wrapper, headless MIDI/SysEx render to WAV, tests for native ROM boot, deterministic same-input output and no mutation of originals.
+**Deliverables:** pinned Gearmulator fork or tool wrapper, headless MIDI/SysEx render to WAV, tests for native ROM boot, deterministic same-input output and no mutation of originals. Compare M3 interpolation/transition predictions with actual stock-OS emulation under matched sweep settings, documenting the differences.
 
 **Exit:** valid stock 2.33 emulator output with reproducible render; Xenia version/ROM hash in manifest; no hardware required to run routine tests.
 
@@ -52,4 +52,4 @@ Milestones are not deadlines. A stage is DONE only when exit criteria are verifi
 
 ## Priority now
 
-**Only M0 then M1.** Do not spend effort yet on GUI, advanced neural conversion, firmware patch integration or destructive MIDI upload. Their interfaces are specified to prevent future rework.
+**Current position (30 October 2026):** M0 and M1 completed; M1 published at `8dd121e`. M2.1–M2.8 passed local Windows regression with **250 PASS, 0 SKIP, 0 FAIL, 0 ERROR** after resolving Windows symlink privilege error 1314; M2 publication review pending. The next planned milestone is M3 after controlled M2 publication. Do not spend effort yet on GUI, advanced neural conversion, firmware patch integration or destructive MIDI upload. Their interfaces are specified to prevent future rework.
