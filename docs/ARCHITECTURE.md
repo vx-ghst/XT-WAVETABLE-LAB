@@ -1,10 +1,10 @@
 # XT-WAVETABLE-LAB — Architecture canonique du dépôt
 
-**Statut : architecture canonique cible.** Ce document est installé par la migration contrôlée ; sa publication sur GitHub reste une opération distincte. Établi après inspection du ZIP du 30 octobre 2026. Le `.git` principal est à `D:\DEV\XT-WAVETABLE-LAB`, **pas** dans `project/`.
+**Statut : architecture canonique publiée.** La migration contrôlée et la publication de l'architecture sur GitHub ont été réalisées au commit `591495653370712ae192715cd4bd5abf73dcf135` (30 octobre 2026). Le dépôt principal se trouve à `D:\DEV\XT-WAVETABLE-LAB` ; **il n'existe pas de second dépôt Git dans `project/`**.
 
 ## Principe directeur
 
-Un dépôt racine unique pour le **code original du laboratoire**, sa documentation publique et ses tests synthétiques. Des dossiers frères exclus de Git pour les dépendances tierces, les données privées et les artefacts d'exécution. **Ne pas utiliser `project/` comme second dépôt racine.** `project/` est vide dans le ZIP audité et doit rester inutilisé pendant la migration, puis être supprimé uniquement si son absence de fichiers est confirmée sur le PC.
+Un dépôt racine unique pour le **code original du laboratoire**, sa documentation publique et ses tests synthétiques. Des dossiers frères exclus de Git pour les dépendances tierces, les données privées et les artefacts d'exécution. **Ne pas utiliser `project/` comme second dépôt racine.** `project/` était vide dans le ZIP audité lors de la migration ; ne supprimer un éventuel répertoire local qu'après vérification de son contenu sur le PC.
 
 ```text
 D:\DEV\XT-WAVETABLE-LAB\                      # RACINE GIT (origin: vx-ghst/XT-WAVETABLE-LAB)
@@ -30,7 +30,7 @@ D:\DEV\XT-WAVETABLE-LAB\                      # RACINE GIT (origin: vx-ghst/XT-W
     projectio/                                 # Manifestes, provenance, configurations
     cli/                                       # Interface en ligne de commande
   adapters/xenia/                              # PUBLIC : intégration out-of-process si nécessaire
-  patches/gearmulator/                        # PUBLIC : patchs texte révisés si besoin, PAS de ROM
+  patches/gearmulator/                         # PUBLIC : patchs texte révisés si besoin, PAS de ROM
   scripts/audit/                               # PUBLIC : outils de contrôle sans données embarquées
   tests/unit/                                  # PUBLIC : tests sur fixtures synthétiques
   tests/integration/                           # PUBLIC : tests qui SKIP si ressources privées absentes
@@ -53,6 +53,8 @@ D:\DEV\XT-WAVETABLE-LAB\                      # RACINE GIT (origin: vx-ghst/XT-W
 ```
 
 Les dossiers logiques `src/xtwavetable/*` décrivent les responsabilités. Ne créer physiquement un sous-dossier que lorsqu'un vrai module ou test y est ajouté : une arborescence vide n'est pas du code.
+
+**État M1 au 30 octobre 2026 :** `src/xtwavetable/model/` et `src/xtwavetable/codec_xt/` sont implémentés et validés localement. Les outils complémentaires sont sous `scripts/audit/`, leurs tests sous `tests/`. Leur première publication GitHub est en préparation et ne doit pas être considérée comme effectuée avant un nouveau commit et son push. Les autres modules métier restent des responsabilités cibles, non des implémentations annoncées.
 
 ## Architecture logicielle, indépendamment de l'hébergement Git
 
@@ -83,6 +85,6 @@ WAV d'entrée (private/audio) -> audio -> analysis -> converter -> optimizer
 - Le téléchargement et le flash du hardware sont hors du périmètre courant.
 - Une licence publique du code propre reste à décider ; ne pas copier des parties GPL de Gearmulator dans une licence incompatible.
 
-## Écarts documentaires à corriger
+## Archives historiques et risque de confusion
 
-Des documents bootstrap historiques de `private/old_package/*v0.2.zip` décrivent `project/` comme une racine Git. **C'est une architecture antérieure à l'initialisation du Git réel.** Pour ce projet, seule cette architecture racine est canonique. Ne pas lancer `CREATE_WORKSPACE.ps1` de l'ancien package comme une migration.
+Des documents bootstrap historiques de `private/old_package/*v0.2.zip` décrivent `project/` comme une racine Git. **C'est une architecture antérieure à l'initialisation du Git réel.** Pour ce projet, seule l'architecture racine décrite ici est canonique. Ne pas lancer `CREATE_WORKSPACE.ps1` de l'ancien package comme une migration.
